@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <title>Carrito - B.C SHOP</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+    
+    :root {
+      --clr-main: #4b33a8;
+      --clr-main-light: #785ce9;
+      --clr-white: #ececec;
+      --clr-gray: #e2e2e2;
+      --clr-red: #961818;
+      --clr-whatsapp: #25D366;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', Sans-Serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6, p, a, input, textarea, ul {
+      margin: 0;
+      padding: 0;
+    }
+    
+    ul {
+      list-style-type: none;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    /* Estilos base */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+      background-color: var(--clr-main);
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    aside {
+      padding: 2rem;
+      color: var(--clr-white);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-weight: 400;
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+    }
+    
+    .texto-footer {
+      color: var(--clr-main-light);
+      font-size: .85rem;
+      text-align: center;
+    }
+    
+    /* Botones del menú */
+    .boton-menu {
+      background: none;
+      border: none;
+      color: var(--clr-white);
+      font-size: 1rem;
+      padding: 1rem;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease;
+      border-radius: 0.5rem;
+    }
+    
+    .boton-menu:hover {
+      background-color: var(--clr-main-light);
+    }
+    
+    /* Main content */
+    main {
+      background-color: var(--clr-white);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    
+    .titulo-principal {
+      color: var(--clr-main);
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 2rem;
+    }
+    
+    /* Carrito */
+    .contenedor-carrito {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .carrito-vacio {
+      text-align: center;
+      color: var(--clr-main);
+      font-size: 1.2rem;
+      display: none;
+    }
+    
+    .carrito-vacio i {
+      margin-left: 0.5rem;
+    }
+    
+    .carrito-productos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .carrito-producto {
+      display: grid;
+      grid-template-columns: 80px 2fr 1fr 1fr 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      background: var(--clr-gray);
+      border-radius: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .carrito-producto:hover {
+      transform: translateX(5px);
+    }
+    
+    .carrito-producto img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    
+    .carrito-product-title h3 {
+      color: var(--clr-main);
+      margin-bottom: 0.25rem;
+    }
+    
+    .carrito-product-title small,
+    .carrito-producto-cantidad small,
+    .carrito-product-price small,
+    .carrito-producto-subtotal small {
+      color: #666;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    
+    .carrito-producto-cantidad p,
+    .carrito-product-price p,
+    .carrito-producto-subtotal p {
+      font-weight: bold;
+      color: var(--clr-main);
+      font-size: 1.1rem;
+    }
+    
+    .carrito-producto-eliminar {
+      background: var(--clr-red);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .carrito-producto-eliminar:hover {
+      background: #7a1313;
+    }
+    
+    /* Acciones del carrito */
+    .carrito-acciones {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 2px solid var(--clr-gray);
+    }
+    
+    .carrito-acciones-vaciar {
+      background: var(--clr-red);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    
+    .carrito-acciones-vaciar:hover {
+      background: #7a1313;
+    }
+    
+    .carrito-acciones-derecha {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .carrito-acciones-total {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    .carrito-acciones-total p:first-child {
+      color: #666;
+    }
+    
+    .carrito-acciones-total p:last-child {
+      color: var(--clr-main);
+      font-size: 1.5rem;
+    }
+    
+    .carrito-acciones-comprar {
+      background: var(--clr-whatsapp);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .carrito-acciones-comprar:hover {
+      background: #128C7E;
+    }
+    
+    .carrito-acciones-comprar:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    /* Modal de confirmación */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.mostrar {
+      display: flex;
+    }
+    
+    .modal-contenido {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+    
+    .modal h3 {
+      color: var(--clr-main);
+      margin-bottom: 1rem;
+    }
+    
+    .modal-botones {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    
+    .boton-cancelar {
+      background: var(--clr-gray);
+      color: #333;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    .boton-confirmar {
+      background: var(--clr-whatsapp);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    /* ===== MEDIA QUERIES RESPONSIVE ===== */
+    
+    /* Tablets (768px - 1024px) */
+    @media (max-width: 1024px) {
+      .wrapper {
+        grid-template-columns: 1fr 3fr;
+      }
+      
+      aside {
+        padding: 1.5rem;
+      }
+      
+      main {
+        padding: 1.5rem;
+      }
+      
+      .carrito-producto {
+        grid-template-columns: 60px 2fr 1fr 1fr 1fr auto;
+        gap: 0.8rem;
+        padding: 0.8rem;
+      }
+      
+      .carrito-producto img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+    
+    /* Tablets pequeñas (600px - 768px) */
+    @media (max-width: 768px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      
+      aside {
+        position: relative;
+        height: auto;
+        padding: 1rem;
+      }
+      
+      .logo {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      
+      nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+      }
+      
+      .boton-menu {
+        justify-content: center;
+        text-align: center;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+      
+      .carrito-producto {
+        grid-template-columns: 50px 1fr auto;
+        grid-template-areas: 
+          "image title delete"
+          "image quantity price"
+          "image subtotal subtotal";
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+      
+      .carrito-producto img {
+        grid-area: image;
+        width: 50px;
+        height: 50px;
+      }
+      
+      .carrito-product-title {
+        grid-area: title;
+      }
+      
+      .carrito-producto-cantidad {
+        grid-area: quantity;
+      }
+      
+      .carrito-product-price {
+        grid-area: price;
+        text-align: right;
+      }
+      
+      .carrito-producto-subtotal {
+        grid-area: subtotal;
+        text-align: center;
+        padding-top: 0.5rem;
+        border-top: 1px solid #ccc;
+      }
+      
+      .carrito-producto-eliminar {
+        grid-area: delete;
+        justify-self: end;
+      }
+      
+      .carrito-acciones {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .carrito-acciones-derecha {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+      
+      .carrito-acciones-comprar {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    /* Móviles (480px - 600px) */
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+      
+      .titulo-principal {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .contenedor-carrito {
+        padding: 1rem;
+      }
+      
+      .carrito-acciones {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+      
+      .carrito-acciones-derecha {
+        justify-content: space-between;
+      }
+      
+      .carrito-acciones-vaciar {
+        width: 100%;
+        text-align: center;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+    
+    /* Móviles pequeños (hasta 480px) */
+    @media (max-width: 480px) {
+      .carrito-producto {
+        grid-template-columns: 40px 1fr auto;
+        grid-template-areas: 
+          "image title delete"
+          "image quantity quantity"
+          "image price price"
+          "subtotal subtotal subtotal";
+        padding: 0.8rem;
+      }
+      
+      .carrito-producto img {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .carrito-product-title h3 {
+        font-size: 0.9rem;
+      }
+      
+      .carrito-acciones-derecha {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .carrito-acciones-total {
+        justify-content: center;
+      }
+      
+      .modal-contenido {
+        padding: 1.5rem;
+      }
+      
+      .modal-botones {
+        flex-direction: column;
+      }
+    }
+    
+    /* Estados */
+    .carrito-vacio.mostrar {
+      display: block;
+    }
+    
+    .carrito-productos.ocultar {
+      display: none;
+    }
+    
+    .carrito-acciones.ocultar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Modal de confirmación -->
+  <div class="modal" id="modalConfirmacion">
+    <div class="modal-contenido">
+      <h3>¿Completar pedido por WhatsApp?</h3>
+      <p>Se abrirá WhatsApp con el resumen de tu pedido para que puedas finalizar la compra.</p>
+      <div class="modal-botones">
+        <button class="boton-cancelar" id="botonCancelar">Cancelar</button>
+        <button class="boton-confirmar" id="botonConfirmarWhatsApp">
+          <i class="bi bi-whatsapp"></i>
+          Abrir WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <aside>
+      <header>
+        <h1 class="logo">B.C SHOP</h1>
+      </header>
+      
+      <nav>
+        <ul>
+          <li><a class="boton-menu boton-volver" href="./index.html"><i class="bi bi-arrow-return-left"></i> Seguir comprando</a></li>
+          <li><a class="boton-menu boton-carrito" href="./carrito.index.html"><i class="bi bi-cart-fill"></i> Carrito</a></li>
+        </ul>
+      </nav>
+      
+      <footer>
+        <p class="texto-footer">© 2025 B.C SHOP</p>
+      </footer>
+    </aside>
+    
+    <main>
+      <h2 class="titulo-principal">Carrito</h2>
+      <div class="contenedor-carrito">
+        <p class="carrito-vacio">Tu carrito está vacío. <i class="bi bi-emoji-frown-fill"></i></p>
+        
+        <div class="carrito-productos">
+          <!-- Los productos del carrito se cargan dinámicamente -->
+        </div>
+        
+        <div class="carrito-acciones">
+          <div class="carrito-acciones-izquierda">
+            <button class="carrito-acciones-vaciar">Vaciar carrito</button>
+          </div>
+          <div class="carrito-acciones-derecha">
+            <div class="carrito-acciones-total">
+              <p>Total:</p>
+              <p id="total">$0.00</p>
+            </div>
+            <button class="carrito-acciones-comprar" id="botonWhatsApp">
+              <i class="bi bi-whatsapp"></i>
+              Completar pedido por WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      
+      const mensajeVacio = document.querySelector('.carrito-vacio');
+      const productosCarrito = document.querySelector('.carrito-productos');
+      const accionesCarrito = document.querySelector('.carrito-acciones');
+      const totalElement = document.getElementById('total');
+      const botonWhatsApp = document.getElementById('botonWhatsApp');
+      const modalConfirmacion = document.getElementById('modalConfirmacion');
+      const botonCancelar = document.getElementById('botonCancelar');
+      const botonConfirmarWhatsApp = document.getElementById('botonConfirmarWhatsApp');
+
+      // Número de WhatsApp de la tienda (CAMBIA ESTE NÚMERO POR EL TUYO)
+      const numeroWhatsApp = "59766796"; // Ejemplo: reemplaza con tu número
+      
+      function renderizarCarrito() {
+        productosCarrito.innerHTML = '';
+        
+        if (carrito.length === 0) {
+          mensajeVacio.classList.add('mostrar');
+          productosCarrito.classList.add('ocultar');
+          accionesCarrito.classList.add('ocultar');
+          botonWhatsApp.disabled = true;
+          return;
+        }
+        
+        mensajeVacio.classList.remove('mostrar');
+        productosCarrito.classList.remove('ocultar');
+        accionesCarrito.classList.remove('ocultar');
+        botonWhatsApp.disabled = false;
+        
+        let total = 0;
+        
+        carrito.forEach(producto => {
+          const subtotal = producto.precio * producto.cantidad;
+          total += subtotal;
+          
+          const productoHTML = `
+            <div class="carrito-producto" data-id="${producto.id}">
+              <img src="images/product${producto.id}.jpg" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/80x80?text=Imagen'">
+              <div class="carrito-product-title">
+                <small>Título</small>
+                <h3>${producto.nombre}</h3>
+              </div>
+              <div class="carrito-producto-cantidad">
+                <small>Cantidad</small>
+                <p>${producto.cantidad}</p>
+              </div>
+              <div class="carrito-product-price">
+                <small>Precio</small>
+                <p>$${producto.precio.toFixed(2)}</p>
+              </div>
+              <div class="carrito-producto-subtotal">
+                <small>Subtotal</small>
+                <p>$${subtotal.toFixed(2)}</p>
+              </div>
+              <button class="carrito-producto-eliminar" data-id="${producto.id}">
+                <i class="bi bi-trash3-fill"></i>
+              </button>
+            </div>
+          `;
+          
+          productosCarrito.innerHTML += productoHTML;
+        });
+        
+        totalElement.textContent = `$${total.toFixed(2)}`;
+        
+        // Agregar event listeners a los botones eliminar
+        document.querySelectorAll('.carrito-producto-eliminar').forEach(boton => {
+          boton.addEventListener('click', eliminarProducto);
+        });
+      }
+      
+      function eliminarProducto(e) {
+        const id = parseInt(e.target.closest('button').dataset.id);
+        carrito = carrito.filter(producto => producto.id !== id);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        renderizarCarrito();
+      }
+      
+      function generarMensajeWhatsApp() {
+        let mensaje = "¡Hola! Quiero hacer un pedido:\n\n";
+        let total = 0;
+        
+        carrito.forEach((producto, index) => {
+          const subtotal = producto.precio * producto.cantidad;
+          total += subtotal;
+          mensaje += `${index + 1}. ${producto.nombre}\n`;
+          mensaje += `   Cantidad: ${producto.cantidad}\n`;
+          mensaje += `   Precio: $${producto.precio.toFixed(2)}\n`;
+          mensaje += `   Subtotal: $${subtotal.toFixed(2)}\n\n`;
+        });
+        
+        mensaje += `💰 *TOTAL: $${total.toFixed(2)}*\n\n`;
+        mensaje += "Por favor, confirmen mi pedido y me indican los pasos a seguir. ¡Gracias! 🛍️";
+        
+        return encodeURIComponent(mensaje);
+      }
+      
+      function abrirWhatsApp() {
+        const mensaje = generarMensajeWhatsApp();
+        const url = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+        window.open(url, '_blank');
+        
+        // Opcional: vaciar carrito después del pedido
+        // carrito = [];
+        // localStorage.setItem('carrito', JSON.stringify(carrito));
+        // renderizarCarrito();
+      }
+      
+      // Vaciar carrito
+      document.querySelector('.carrito-acciones-vaciar').addEventListener('click', function() {
+        carrito = [];
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        renderizarCarrito();
+      });
+      
+      // Botón WhatsApp - mostrar modal de confirmación
+      botonWhatsApp.addEventListener('click', function() {
+        modalConfirmacion.classList.add('mostrar');
+      });
+      
+      // Cancelar en modal
+      botonCancelar.addEventListener('click', function() {
+        modalConfirmacion.classList.remove('mostrar');
+      });
+      
+      // Confirmar WhatsApp en modal
+      botonConfirmarWhatsApp.addEventListener('click', function() {
+        modalConfirmacion.classList.remove('mostrar');
+        abrirWhatsApp();
+      });
+      
+      // Cerrar modal al hacer clic fuera
+      modalConfirmacion.addEventListener('click', function(e) {
+        if (e.target === modalConfirmacion) {
+          modalConfirmacion.classList.remove('mostrar');
+        }
+      });
+      
+      // Inicializar
+      renderizarCarrito();
+    });
+  </script>
+</body>
+</html>

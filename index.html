@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <title>B.C SHOP</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+    
+    :root {
+      --clr-main: #F3AAE2;
+      --clr-main-light: #F3AAE2;
+      --clr-white: #ececec;
+      --clr-gray: #e2e2e2;
+      --clr-red: #961818;
+      --clr-green: #25a15e;
+      --clr-whatsapp: #25D366;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', Sans-Serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6, p, a, input, textarea, ul {
+      margin: 0;
+      padding: 0;
+    }
+    
+    ul {
+      list-style-type: none;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    /* Estilos base responsive */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+      background-color: var(--clr-main);
+      min-height: 100vh;
+    }
+    
+    /* Sidebar para desktop */
+    aside {
+      padding: 2rem;
+      color: black;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-weight: 400;
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+    }
+    
+    .texto-footer {
+      color: var(--clr-main-light);
+      font-size: .85rem;
+      text-align: center;
+    }
+    
+    /* Main content */
+    main {
+      background-color: var(--clr-main);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    
+    /* Botones del menú */
+    .boton-menu {
+      background: none;
+      border: none;
+      color: black;
+      font-size: 1rem;
+      padding: 1rem;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease;
+      border-radius: 0.5rem;
+    }
+    
+    .boton-menu.active {
+      background-color: var(--clr-main-light);
+    }
+    
+    .boton-menu:hover {
+      background-color: var(--clr-main-light);
+    }
+    
+    .boton-carrito {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .numerito {
+      background-color: #666;
+      color: var(--clr-main);
+      padding: 0.2rem 0.5rem;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    
+    .titulo-principal {
+      color: black;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 2rem;
+    }
+    
+    /* Contenedor de productos responsive */
+    .contenedor-productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 1rem;
+    }
+    
+    .product-card {
+      background-color: var(--clr-white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    
+    .product-info {
+      padding: 1rem 0;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: black;
+    }
+    
+    .product-description {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      flex-grow: 1;
+    }
+    
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: black;
+      margin: 0.5rem 0;
+    }
+    
+    .product-rating {
+      color: #ffc107;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Controles de cantidad */
+    .controles-cantidad {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1rem 0;
+      background: var(--clr-gray);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    }
+    
+    .boton-cantidad {
+      background: #666;
+      color: white;
+      border: none;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .boton-cantidad:hover {
+      background: #666;
+    }
+    
+    .cantidad-display {
+      font-weight: bold;
+      color: #666;
+      font-size: 1.1rem;
+      min-width: 30px;
+      text-align: center;
+    }
+    
+    .add-to-cart {
+      background-color: #25a15e;
+      color: var(--clr-white);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      transition: background-color 0.3s ease;
+      margin-top: auto;
+    }
+    
+    .add-to-cart:hover {
+      background-color: var(--clr-main-light);
+    }
+    
+    .add-to-cart.added {
+      background-color: var(--clr-green);
+    }
+    
+    /* Notificación */
+    .notificacion {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--clr-green);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .notificacion.mostrar {
+      transform: translateX(0);
+    }
+    
+    /* ===== MEDIA QUERIES PARA RESPONSIVE ===== */
+    
+    /* Tablets (768px - 1024px) */
+    @media (max-width: 1024px) {
+      .wrapper {
+        grid-template-columns: 1fr 3fr;
+      }
+      
+      .contenedor-productos {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      aside {
+        padding: 1.5rem;
+      }
+      
+      main {
+        padding: 1.5rem;
+      }
+    }
+    
+    /* Tablets pequeñas y móviles grandes (600px - 768px) */
+    @media (max-width: 768px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      
+      aside {
+        position: relative;
+        height: auto;
+        padding: 1rem;
+      }
+      
+      .menu-responsive {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+      
+      .menu-responsive li {
+        flex: 1;
+        min-width: 120px;
+      }
+      
+      .boton-menu {
+        text-align: center;
+        justify-content: center;
+        padding: 0.8rem 0.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .logo {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      
+      .contenedor-productos {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        padding: 0.5rem;
+      }
+      
+      .titulo-principal {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .notificacion {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        transform: translateY(-100%);
+      }
+      
+      .notificacion.mostrar {
+        transform: translateY(0);
+      }
+    }
+    
+    /* Móviles (480px - 600px) */
+    @media (max-width: 600px) {
+      .contenedor-productos {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+      
+      .product-card {
+        padding: 1rem;
+      }
+      
+      .product-image img {
+        height: 150px;
+      }
+      
+      .product-title {
+        font-size: 1rem;
+      }
+      
+      .product-description {
+        font-size: 0.8rem;
+      }
+      
+      .product-price {
+        font-size: 1.1rem;
+      }
+      
+      .add-to-cart {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      aside {
+        padding: 0.8rem;
+      }
+      
+      main {
+        padding: 1rem;
+      }
+    }
+    
+    /* Móviles pequeños (hasta 480px) */
+    @media (max-width: 480px) {
+      .contenedor-productos {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .menu-responsive {
+        flex-direction: column;
+      }
+      
+      .menu-responsive li {
+        min-width: auto;
+      }
+      
+      .boton-menu {
+        justify-content: flex-start;
+        text-align: left;
+      }
+      
+      .titulo-principal {
+        font-size: 1.3rem;
+      }
+      
+      .product-card {
+        max-width: 100%;
+      }
+    }
+    
+    /* Menú hamburguesa para móviles */
+    .menu-hamburguesa {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--clr-white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .menu-hamburguesa {
+        display: block;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+      
+      nav {
+        display: none;
+      }
+      
+      nav.active {
+        display: block;
+      }
+    }
+
+    /* Clase para ocultar productos por categoría */
+    .oculto {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Notificación -->
+  <div class="notificacion" id="notificacion">
+    <i class="bi bi-check-circle-fill"></i>
+    <span id="texto-notificacion">Producto agregado al carrito</span>
+  </div>
+
+  <div class="wrapper">
+    <aside>
+      <header>
+        <h1 class="logo">B.C SHOP</h1>
+        <button class="menu-hamburguesa" id="menuToggle">
+          <i class="bi bi-list"></i>
+        </button>
+      </header>
+      
+      <nav id="menuNav">
+        <ul class="menu-responsive">
+          <li><button class="boton-menu boton-categoria active" data-categoria="todos"><i class="bi bi-hand-index-fill"></i>Todos los productos</button></li>
+          <li><button class="boton-menu boton-categoria" data-categoria="Irrigadores bucales"><i class="bi bi-hand-index"></i>Irrigadores bucales</button></li>
+          <li><button class="boton-menu boton-categoria" data-categoria="Enjuagues bucales"><i class="bi bi-hand-index"></i>Enjuagues bucales</button></li>
+          <li><button class="boton-menu boton-categoria" data-categoria="Otros"><i class="bi bi-hand-index"></i>Otros</button></li>
+          <li>
+            <a class="boton-menu boton-carrito" href="./carrito.index.html">
+              <span><i class="bi bi-cart-fill"></i> Carrito</span>
+              <span class="numerito" id="numerito">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <footer>
+        <p class="texto-footer">© 2025 B.C SHOP</p>
+      </footer>
+    </aside>
+    
+    <main>
+      <h2 class="titulo-principal" id="titulo-categoria">Todos los productos</h2>
+      <div class="contenedor-productos">
+        
+        <!-- PRODUCTO 1 - Salud Bucal -->
+        <div class="product-card" data-categoria="Irrigadores bucales">
+          <div class="product-image">
+            <img src="img/producto1.jpg" alt="Irrigador Bucal">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Irrigador Bucal</h3>
+            <p class="product-description">Limpieza interdental y masaje de encías con chorros de agua a presión. Elimina restos de comida y placa de donde el cepillo no llega. Ideal para cuidar encías, brackets o implantes.</p>
+            <div class="product-rating">★★★★★</div>
+            <p class="product-price">$25.0</p>
+            
+            <!-- Controles de cantidad -->
+            <div class="controles-cantidad">
+              <button class="boton-cantidad boton-disminuir" data-id="1">-</button>
+              <span class="cantidad-display" data-id="1">1</span>
+              <button class="boton-cantidad boton-aumentar" data-id="1">+</button>
+            </div>
+            
+            <button class="add-to-cart" data-id="1" data-name="Irrigador Bucal" data-price="25.0" data-imagen="img/product1.jpg">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+        
+        <!-- PRODUCTO 2 - Salud Bucal -->
+        <div class="product-card" data-categoria="Enjuagues bucales">
+          <div class="product-image">
+            <img src="img/producto2.jpg" alt="Enjuague bucal anticaries con flúor">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Enjuague bucal anticaries con flúor</h3>
+            <p class="product-description">Enjuague bucal sin alcohol que combate las caries. Fortalece el esmalte, previene caries y elimina los gérmenes que causan el mal aliento.<br><strong>33.8 Onzas / 1 L</strong></p>
+            <div class="product-rating">★★★★★</div>
+            <p class="product-price">$20.0</p>
+            
+            <div class="controles-cantidad">
+              <button class="boton-cantidad boton-disminuir" data-id="2">-</button>
+              <span class="cantidad-display" data-id="2">1</span>
+              <button class="boton-cantidad boton-aumentar" data-id="2">+</button>
+            </div>
+            
+            <button class="add-to-cart" data-id="2" data-name="Enjuague Bucal (para niños)" data-price="20.0" data-imagen="img/product2.jpg">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+        
+        <!-- PRODUCTO 3 - Salud Bucal -->
+        <div class="product-card" data-categoria="Enjuagues bucales">
+          <div class="product-image">
+            <img src="img/producto3.jpg" alt="Enjuague bucal anticaries">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Enjuague bucal anticaries</h3>
+            <p class="product-description">Enjuague bucal anticaries con flúor. Fortalece el esmalte dental y protege activamente contra las caries. Sabor a menta fresca para un aliento duradero.<br><strong>33.8 Onzas / 1 L</strong></p>
+            <div class="product-rating">★★★★★</div>
+            <p class="product-price">$20.0</p>
+            
+            <div class="controles-cantidad">
+              <button class="boton-cantidad boton-disminuir" data-id="3">-</button>
+              <span class="cantidad-display" data-id="3">1</span>
+              <button class="boton-cantidad boton-aumentar" data-id="3">+</button>
+            </div>
+            
+            <button class="add-to-cart" data-id="3" data-name="Enjuague bucal sin alcohol" data-price="20.0" data-imagen="img/product3.jpg">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+        
+        <!-- PRODUCTO 4 - Salud Bucal -->
+        <div class="product-card" data-categoria="Otros">
+          <div class="product-image">
+            <img src="img/producto4.jpg" alt="Paquete de Hilo Dental">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Paquete de Hilo Dental</h3>
+            <p class="product-description">Seda dental con soporte en forma de "U" para una limpieza interdental fácil. Su diseño ergonómico facilita la limpieza entre los dientes.<br><strong>(150 Unidades)</strong></p>
+            <div class="product-rating">★★★★★</div>
+            <p class="product-price">$10.0</p>
+            
+            <div class="controles-cantidad">
+              <button class="boton-cantidad boton-disminuir" data-id="4">-</button>
+              <span class="cantidad-display" data-id="4">1</span>
+              <button class="boton-cantidad boton-aumentar" data-id="4">+</button>
+            </div>
+            
+            <button class="add-to-cart" data-id="4" data-name="Paquete de Hilo Dental" data-price="10.0" data-imagen="img/product4.jpg">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+        
+        <!-- PRODUCTO 5 - Salud Bucal -->
+        <div class="product-card" data-categoria="Otros">
+          <div class="product-image">
+            <img src="img/producto5.jpg" alt="Pasta Colgate">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Pasta Colgate (Triple Acción)</h3>
+            <p class="product-description">Pasta dental blanqueadora con tecnología de enjuague previo al cepillado (Plax). Su fórmula blanqueadora remueve manchas y aporta brillo, asegurando una sonrisa más blanca y sana.<br><strong>Cont. Neto 6 Onzas (170 g)</strong></p>
+            <div class="product-rating">★★★★★</div>
+            <p class="product-price">$4.0</p>
+            
+            <div class="controles-cantidad">
+              <button class="boton-cantidad boton-disminuir" data-id="5">-</button>
+              <span class="cantidad-display" data-id="5">1</span>
+              <button class="boton-cantidad boton-aumentar" data-id="5">+</button>
+            </div>
+            
+            <button class="add-to-cart" data-id="5" data-name="Pasta Colgate (Triple Acción)" data-price="4.0" data-imagen="img/product5.jpg">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+        
+        <!-- PRODUCTO 6 - Salud Bucal -->
+        <div class="product-card" data-categoria="Enjuagues bucales">
+          <div class="product-image">
+            <img src="img/producto6.jpg" alt="Enjuague Bucal Blanqueador Muti-acción ">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">Enjuague Bucal Blanqueador
+            <br> Muti-acción </h3>
+            <p class="product-description">Pasta dental de acción múltiple con efecto blanqueador.Ofrece una limpieza completa y un blanqueamiento visible.<br><strong>32 Onzas / 946 ml</strong></p>
+            <div class="product-rating">★★★★★</div>
+            <p class="product-price">$20.0</p>
+            
+            <div class="controles-cantidad">
+              <button class="boton-cantidad boton-disminuir" data-id="6">-</button>
+              <span class="cantidad-display" data-id="6">1</span>
+              <button class="boton-cantidad boton-aumentar" data-id="6">+</button>
+            </div>
+            
+            <button class="add-to-cart" data-id="6" data-name="Enjuague Bucal Antiseptico" data-price="20.0" data-imagen="img/product6.jpg">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Carrito en localStorage
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('menuToggle');
+      const menuNav = document.getElementById('menuNav');
+      const botonesCategoria = document.querySelectorAll('.boton-categoria');
+      const tituloCategoria = document.getElementById('titulo-categoria');
+      const numerito = document.getElementById('numerito');
+      const notificacion = document.getElementById('notificacion');
+      const textoNotificacion = document.getElementById('texto-notificacion');
+
+      // Menú hamburguesa
+      if (menuToggle && menuNav) {
+        menuToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          menuNav.classList.toggle('active');
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(event) {
+          if (!event.target.closest('aside') && menuNav.classList.contains('active')) {
+            menuNav.classList.remove('active');
+          }
+        });
+      }
+
+      // Actualizar numerito del carrito
+      function actualizarNumerito() {
+        const totalItems = carrito.reduce((total, producto) => total + producto.cantidad, 0);
+        numerito.textContent = totalItems;
+      }
+
+      // Mostrar notificación
+      function mostrarNotificacion(mensaje) {
+        textoNotificacion.textContent = mensaje;
+        notificacion.classList.add('mostrar');
+        setTimeout(() => {
+          notificacion.classList.remove('mostrar');
+        }, 3000);
+      }
+
+      // Control de cantidad - Aumentar
+      document.querySelectorAll('.boton-aumentar').forEach(boton => {
+        boton.addEventListener('click', function() {
+          const id = this.dataset.id;
+          const display = document.querySelector(`.cantidad-display[data-id="${id}"]`);
+          let cantidad = parseInt(display.textContent);
+          cantidad++;
+          display.textContent = cantidad;
+        });
+      });
+
+      // Control de cantidad - Disminuir
+      document.querySelectorAll('.boton-disminuir').forEach(boton => {
+        boton.addEventListener('click', function() {
+          const id = this.dataset.id;
+          const display = document.querySelector(`.cantidad-display[data-id="${id}"]`);
+          let cantidad = parseInt(display.textContent);
+          if (cantidad > 1) {
+            cantidad--;
+            display.textContent = cantidad;
+          }
+        });
+      });
+
+      // Agregar producto al carrito
+      document.querySelectorAll('.add-to-cart').forEach(boton => {
+        boton.addEventListener('click', function() {
+          const id = parseInt(this.dataset.id);
+          const nombre = this.dataset.name;
+          const precio = parseFloat(this.dataset.price);
+          const imagen = this.dataset.imagen;
+          const cantidad = parseInt(document.querySelector(`.cantidad-display[data-id="${id}"]`).textContent);
+
+          // Buscar si el producto ya está en el carrito
+          const productoExistente = carrito.find(item => item.id === id);
+
+          if (productoExistente) {
+            productoExistente.cantidad += cantidad;
+          } else {
+            carrito.push({
+              id,
+              nombre,
+              precio,
+              imagen,
+              cantidad: cantidad
+            });
+          }
+
+          // Guardar en localStorage
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+
+          // Actualizar UI
+          actualizarNumerito();
+          mostrarNotificacion(`✅ ${cantidad} ${nombre} agregado${cantidad > 1 ? 's' : ''} al carrito`);
+
+          // Efecto visual en el botón
+          const botonAdd = this;
+          botonAdd.classList.add('added');
+          botonAdd.innerHTML = '<i class="bi bi-check-lg"></i> Agregado';
+          setTimeout(() => {
+            botonAdd.classList.remove('added');
+            botonAdd.textContent = 'Agregar al Carrito';
+            // Resetear cantidad a 1
+            document.querySelector(`.cantidad-display[data-id="${id}"]`).textContent = '1';
+          }, 2000);
+        });
+      });
+
+      // Filtrar productos por categoría
+      function filtrarPorCategoria(e) {
+        const boton = e.target.closest('.boton-categoria');
+        const categoria = boton.dataset.categoria;
+
+        // Actualizar botones activos
+        botonesCategoria.forEach(btn => btn.classList.remove('active'));
+        boton.classList.add('active');
+
+        // Actualizar título
+        const titulo = boton.textContent.trim();
+        tituloCategoria.textContent = titulo;
+
+        // Mostrar/ocultar productos
+        const todosProductos = document.querySelectorAll('.product-card');
+        
+        if (categoria === 'todos') {
+          todosProductos.forEach(producto => {
+            producto.classList.remove('oculto');
+          });
+        } else {
+          todosProductos.forEach(producto => {
+            if (producto.dataset.categoria === categoria) {
+              producto.classList.remove('oculto');
+            } else {
+              producto.classList.add('oculto');
+            }
+          });
+        }
+
+        // Cerrar menú en móviles
+        if (window.innerWidth <= 768) {
+          menuNav.classList.remove('active');
+        }
+      }
+
+      // Event listeners para categorías
+      botonesCategoria.forEach(boton => {
+        boton.addEventListener('click', filtrarPorCategoria);
+      });
+
+      // Inicializar
+      actualizarNumerito();
+    });
+  </script>
+</body>
+</html>
